@@ -7,10 +7,9 @@ app = Flask(__name__)
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 TELEGRAM_API = f"https://api.telegram.org/bot{BOT_TOKEN}"
 
+# Foydalanuvchi qaysi menyuda turganini saqlaydi
+user_states = {}
 
-# =========================================================
-# TELEGRAM FUNKSIYALARI
-# =========================================================
 
 def send_message(chat_id, text, keyboard=None):
     data = {
@@ -27,9 +26,9 @@ def send_message(chat_id, text, keyboard=None):
     )
 
 
-# =========================================================
-# REPLY KEYBOARD
-# =========================================================
+# =========================
+# REPLY KEYBOARDS
+# =========================
 
 def main_keyboard():
     return {
@@ -91,6 +90,10 @@ def back_keyboard():
     }
 
 
+# =========================
+# INLINE CHEK TUGMASI
+# =========================
+
 def receipt_keyboard():
     return {
         "inline_keyboard": [
@@ -104,9 +107,9 @@ def receipt_keyboard():
     }
 
 
-# =========================================================
-# MATNLAR
-# =========================================================
+# =========================
+# TEXTLAR
+# =========================
 
 START_TEXT = """🎓 MERAN EDUCATION BOT📚
 
@@ -143,7 +146,7 @@ TESTS_TEXT = """💳 TO‘LOV QILISH
 
 Nargiza Samandarova
 
-📞 Qo‘shimcha ma’lumot olish uchun:
+📞 Qo‘shimcha ma‘lumot olish uchun:
 
 @Meran_education
 """
@@ -171,7 +174,7 @@ Nargiza Samandarova
 
 📌 To‘lovni amalga oshirgandan so‘ng, chekni yuboring.
 
-📞 Qo‘shimcha ma’lumot uchun:
+📞 Qo‘shimcha ma‘lumot uchun:
 @Meran_education
 """
 
@@ -194,7 +197,7 @@ Nargiza Samandarova
 
 📌 To‘lovni amalga oshirgandan so‘ng, chekni yuboring.
 
-📞 Qo‘shimcha ma’lumot uchun:
+📞 Qo‘shimcha ma‘lumot uchun:
 @Meran_education
 """
 
@@ -217,7 +220,7 @@ Nargiza Samandarova
 
 📌 To‘lovni amalga oshirgandan so‘ng, chekni yuboring.
 
-📞 Qo‘shimcha ma’lumot uchun:
+📞 Qo‘shimcha ma‘lumot uchun:
 @Meran_education
 """
 
@@ -240,7 +243,7 @@ Nargiza Samandarova
 
 📌 To‘lovni amalga oshirgandan so‘ng, chekni yuboring.
 
-📞 Qo‘shimcha ma’lumot uchun:
+📞 Qo‘shimcha ma‘lumot uchun:
 @Meran_education
 """
 
@@ -275,14 +278,18 @@ Ushbu bo‘lim tez orada ishga tushadi. 🚀
 """
 
 
-# =========================================================
-# XABARLARNI BOSHQARISH
-# =========================================================
+# =========================
+# MESSAGE HANDLER
+# =========================
 
 def handle_message(chat_id, text):
 
+    # =========================
     # START
+    # =========================
+
     if text == "/start":
+        user_states[chat_id] = "main"
         send_message(
             chat_id,
             START_TEXT,
@@ -292,10 +299,12 @@ def handle_message(chat_id, text):
 
 
     # =========================
-    # BOSH MENYU
+    # MAIN MENU
     # =========================
 
     if text == "📚 O‘quv materiallari":
+        user_states[chat_id] = "materials"
+
         send_message(
             chat_id,
             MATERIALS_TEXT,
@@ -305,6 +314,8 @@ def handle_message(chat_id, text):
 
 
     if text == "👶 MERAN KIDS":
+        user_states[chat_id] = "kids"
+
         send_message(
             chat_id,
             KIDS_TEXT,
@@ -314,6 +325,8 @@ def handle_message(chat_id, text):
 
 
     if text == "🎁 Promo kodlar":
+        user_states[chat_id] = "promo"
+
         send_message(
             chat_id,
             PROMO_TEXT,
@@ -323,6 +336,8 @@ def handle_message(chat_id, text):
 
 
     if text == "ℹ️ Biz haqimizda":
+        user_states[chat_id] = "about"
+
         send_message(
             chat_id,
             ABOUT_TEXT,
@@ -336,6 +351,8 @@ def handle_message(chat_id, text):
     # =========================
 
     if text == "📖 Adabiyot":
+        user_states[chat_id] = "literature"
+
         send_message(
             chat_id,
             LITERATURE_TEXT,
@@ -345,10 +362,12 @@ def handle_message(chat_id, text):
 
 
     # =========================
-    # ADABIYOT
+    # ASARLAR
     # =========================
 
     if text == "📚 Asarlar":
+        user_states[chat_id] = "works"
+
         send_message(
             chat_id,
             WORKS_TEXT,
@@ -357,82 +376,87 @@ def handle_message(chat_id, text):
         return
 
 
+    # =========================
+    # MAVZULASHTIRILGAN TESTLAR
+    # =========================
+
     if text == "📝 Mavzulashtirilgan testlar":
+
+        # Foydalanuvchi Adabiyot menyusida qoladi
+        user_states[chat_id] = "literature"
+
+        # Faqat to‘lov xabari chiqadi
+        # Avtomatik "🔙 Ortga" xabari YO‘Q
         send_message(
             chat_id,
             TESTS_TEXT,
             receipt_keyboard()
         )
-
-        # Pastki Reply Keyboardni ham saqlab qolamiz
-        send_message(
-            chat_id,
-            "🔙 Ortga",
-            literature_keyboard()
-        )
         return
 
 
     # =========================
-    # PROMO KODLAR
+    # PROMO — IBRAT
     # =========================
 
     if text == "🎓 Ibrat Academy":
+
+        # Promo menyusi holatda qoladi
+        user_states[chat_id] = "promo"
+
+        # Faqat mahsulot ma‘lumoti chiqadi
         send_message(
             chat_id,
             IBRAT_TEXT,
             receipt_keyboard()
         )
-
-        send_message(
-            chat_id,
-            "🔙 Ortga",
-            promo_keyboard()
-        )
         return
 
 
+    # =========================
+    # PROMO — MUTOLAA
+    # =========================
+
     if text == "📚 Mutolaa":
+
+        user_states[chat_id] = "promo"
+
         send_message(
             chat_id,
             MUTOLAA_TEXT,
             receipt_keyboard()
         )
-
-        send_message(
-            chat_id,
-            "🔙 Ortga",
-            promo_keyboard()
-        )
         return
 
 
+    # =========================
+    # PROMO — UZCHESS
+    # =========================
+
     if text == "♟️ UZchess":
+
+        user_states[chat_id] = "promo"
+
         send_message(
             chat_id,
             UZCHESS_TEXT,
             receipt_keyboard()
         )
-
-        send_message(
-            chat_id,
-            "🔙 Ortga",
-            promo_keyboard()
-        )
         return
 
 
+    # =========================
+    # PROMO — USTOZ AI
+    # =========================
+
     if text == "🤖 Ustoz AI":
+
+        user_states[chat_id] = "promo"
+
         send_message(
             chat_id,
             USTOZ_TEXT,
             receipt_keyboard()
-        )
-
-        send_message(
-            chat_id,
-            "🔙 Ortga",
-            promo_keyboard()
         )
         return
 
@@ -443,7 +467,108 @@ def handle_message(chat_id, text):
 
     if text == "🔙 Ortga":
 
-        # Oddiy holatda asosiy menyuga qaytadi
+        current_state = user_states.get(chat_id, "main")
+
+
+        # Adabiyot → O‘quv materiallari
+        if current_state == "literature":
+            user_states[chat_id] = "materials"
+
+            send_message(
+                chat_id,
+                MATERIALS_TEXT,
+                materials_keyboard()
+            )
+            return
+
+
+        # Asarlar → Adabiyot
+        if current_state == "works":
+            user_states[chat_id] = "literature"
+
+            send_message(
+                chat_id,
+                LITERATURE_TEXT,
+                literature_keyboard()
+            )
+            return
+
+
+        # Testlar → Adabiyot
+        if current_state == "tests":
+            user_states[chat_id] = "literature"
+
+            send_message(
+                chat_id,
+                LITERATURE_TEXT,
+                literature_keyboard()
+            )
+            return
+
+
+        # Promo mahsulot → Promo kodlar
+        if current_state == "promo":
+            user_states[chat_id] = "promo"
+
+            send_message(
+                chat_id,
+                PROMO_TEXT,
+                promo_keyboard()
+            )
+            return
+
+
+        # Promo menyusi → Bosh menyu
+        if current_state == "promo_main":
+            user_states[chat_id] = "main"
+
+            send_message(
+                chat_id,
+                START_TEXT,
+                main_keyboard()
+            )
+            return
+
+
+        # O‘quv materiallari → Bosh menyu
+        if current_state == "materials":
+            user_states[chat_id] = "main"
+
+            send_message(
+                chat_id,
+                START_TEXT,
+                main_keyboard()
+            )
+            return
+
+
+        # MERAN KIDS → Bosh menyu
+        if current_state == "kids":
+            user_states[chat_id] = "main"
+
+            send_message(
+                chat_id,
+                START_TEXT,
+                main_keyboard()
+            )
+            return
+
+
+        # Biz haqimizda → Bosh menyu
+        if current_state == "about":
+            user_states[chat_id] = "main"
+
+            send_message(
+                chat_id,
+                START_TEXT,
+                main_keyboard()
+            )
+            return
+
+
+        # Boshqa holatlarda
+        user_states[chat_id] = "main"
+
         send_message(
             chat_id,
             START_TEXT,
@@ -452,9 +577,9 @@ def handle_message(chat_id, text):
         return
 
 
-# =========================================================
-# WEBHOOK
-# =========================================================
+# =========================
+# FLASK
+# =========================
 
 @app.route("/", methods=["GET"])
 def home():
@@ -485,9 +610,9 @@ def webhook():
     return "OK", 200
 
 
-# =========================================================
-# SERVER
-# =========================================================
+# =========================
+# RUN
+# =========================
 
 if __name__ == "__main__":
 
