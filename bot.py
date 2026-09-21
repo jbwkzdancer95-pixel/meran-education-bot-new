@@ -11,7 +11,7 @@ TELEGRAM_API = f"https://api.telegram.org/bot{BOT_TOKEN}"
 user_states = {}
 
 
-def send_message(chat_id, text, keyboard=None):
+def send_message(chat_id, text, keyboard=None, parse_mode=None):
     data = {
         "chat_id": chat_id,
         "text": text
@@ -19,6 +19,9 @@ def send_message(chat_id, text, keyboard=None):
 
     if keyboard:
         data["reply_markup"] = keyboard
+
+    if parse_mode:
+        data["parse_mode"] = parse_mode
 
     requests.post(
         f"{TELEGRAM_API}/sendMessage",
@@ -264,11 +267,85 @@ ABOUT_TEXT = """ℹ️ BIZ HAQIMIZDA
 """
 
 
-WORKS_TEXT = """📚 ASARLAR
+# =========================
+# ASARLAR RO‘YXATI
+# =========================
 
-Hozircha asarlar ro‘yxati qo‘shilmagan.
+WORKS_TEXT = """📝 <b>Ona (O'zbek) tili va adabiyot fanidan Milliy sertifikat imtihoni bo'yicha mustaqil o'qish uchun tavsiya etilgan badiiy asalar (2026-yil 1-apreldan buyon) <a href="https://t.me/MeranEdu_library/3">ro'yxati</a>.</b>
 
-Tez orada 36 ta asar Telegram kanalidagi PDF fayllarga havola bilan joylashtiriladi.
+<i>(Quyida o'zingizga kerakli bo‘lgan asarni tanlang!)</i>
+
+<a href="https://t.me/MeranEdu_library/7"><b>1. Abdulla Qodiriy - "O'tkan kunlar"</b></a>
+
+<a href="https://t.me/MeranEdu_library/12"><b>2. Abdulhamid Cho‘lpon - "Kecha va kunduz"</b></a>
+
+<a href="https://t.me/MeranEdu_library/15"><b>3. O‘tkir Hoshimov - "Tushda kechgan umrlar"</b></a>  <a href="https://t.me/MeranEdu_library/17"><b>"Ikki eshik orasi"</b></a>
+
+<a href="https://t.me/MeranEdu_library/38"><b>4. Murod Muhammad Do'st - "Lolazor"</b></a>
+
+<a href="https://t.me/MeranEdu_library/54"><b>5. Tog'ay Murod - "Otamdan qolgan dalalar"</b></a>
+
+<a href="https://t.me/MeranEdu_library/56"><b>6. Chingiz Aytmatov - "Qiyomat"</b></a>  <a href="https://t.me/MeranEdu_library/79"><b>"Asrga tatigulik kun"</b></a>
+
+<a href="https://t.me/MeranEdu_library/86"><b>7. Mixail Lermontov - "Zamonamiz qahramoni"</b></a>
+
+<a href="https://t.me/MeranEdu_library/87"><b>8. Yuy Xua - "Yashamoq"</b></a>
+
+<a href="https://t.me/MeranEdu_library/89"><b>9. Onore de Balzak - "Sag'ri teri tilsimi"</b></a>
+
+<a href="https://t.me/MeranEdu_library/90"><b>10. Aleksandr Dyuma - "Graf Monte Kristo" ("If qal’asining mahbusi"), 1-kitob</b></a>
+
+<a href="https://t.me/MeranEdu_library/91"><b>11. Jon Boyn - "Yo‘l-yo‘l poyjoma kiygan bolakay"</b></a>
+
+<a href="https://t.me/MeranEdu_library/92"><b>12. Jonatan Svift - "Gulliverning sayohatlari"</b></a>
+
+<a href="https://t.me/MeranEdu_library/94"><b>13. Sadriddin Ayniy - "Sudxo'rning o'limi"</b></a>
+
+<a href="https://t.me/MeranEdu_library/96"><b>14. Erkin A'zam - "Chapaklar va chalpaklar mamlakati"</b></a>
+
+<a href="https://t.me/MeranEdu_library/97"><b>15. Chingiz Aytmatov - "Oqkema"</b></a>
+
+<a href="https://t.me/MeranEdu_library/99"><b>16. Jorj Ourell - "Molxona"</b></a>
+
+<a href="https://t.me/MeranEdu_library/101"><b>17. Antuan de Sent-Ekzyuperi - "Kichkina shahzoda"</b></a>
+
+<a href="https://t.me/MeranEdu_library/103"><b>18. Sharof Boshbekov - "Temir xotin"</b></a>
+
+<a href="https://t.me/MeranEdu_library/105"><b>19. Abdulla Oripov - "Ranjkom"</b></a>
+
+<a href="https://t.me/MeranEdu_library/106"><b>20. Abdulla Qahhor - "Asror bobo", "Ming bir jon", "O'jar", "San'atkor", "Adabiyot muallimi" va "Anor"</b></a>
+
+<a href="https://t.me/MeranEdu_library/112"><b>21. G'ofur G'ulom - "Mening o'g'rigina bolam"</b></a>
+
+<a href="https://t.me/MeranEdu_library/112"><b>22. Odil Yoqubov - "Muzqaymoq"</b></a>
+
+<a href="https://t.me/MeranEdu_library/115"><b>23. Zulfiya Qurolboy qizi - "Tafakkur"</b></a>
+
+<a href="https://t.me/MeranEdu_library/116"><b>24. Nazar Eshonqul - "Shamolni tutib bo'lmaydi" va "Maymun yetaklagan odam"</b></a>
+
+<a href="https://t.me/MeranEdu_library/119"><b>25. Abduqayum Yo'ldosh - "Puankare"</b></a>
+
+<a href="https://t.me/MeranEdu_library/121"><b>26. Jek London - "Hayotga muhabbat"</b></a>  <a href="https://t.me/MeranEdu_library/123"><b>"Oq sukunat"</b></a>
+
+<a href="https://t.me/MeranEdu_library/125"><b>27. Nodar Dumbadze - "Hellados"</b></a>
+
+<a href="https://t.me/MeranEdu_library/127"><b>28. Anton Chexov - "Garov"</b></a>  <a href="https://t.me/MeranEdu_library/129"><b>"Xameleon" va "Semiz va ozg'in"</b></a>
+
+<a href="https://t.me/MeranEdu_library/132"><b>29. Artur Konan Doyl - "Mallalar uyushmasi"</b></a>
+
+<a href="https://t.me/MeranEdu_library/134"><b>30. Frans Kafka - "Evrilish"</b></a>
+
+<a href="https://t.me/MeranEdu_library/136"><b>31. Aziz Nesin - "Hushtak afandi", "Adabiyotsevar", "Alifboning birinchi harfi", "Demokratiya shunqori"</b></a>
+
+<a href="https://t.me/MeranEdu_library/139"><b>32. Abdulhamid Cho'lpon - "She'rlar to'plami"</b></a>
+
+<a href="https://t.me/MeranEdu_library/140"><b>33. Usmon Nosir - "She'rlar to'plami"</b></a>
+
+<a href="https://t.me/MeranEdu_library/141"><b>34. Abdulla Oripov - "She'rlar to'plami"</b></a>
+
+<a href="https://t.me/MeranEdu_library/142"><b>35. Erkin Vohidov - "She'rlar to'plami"</b></a>
+
+<a href="https://t.me/MeranEdu_library/143"><b>36. Shavkat Rahmon - "She'rlar to'plami"</b></a>
 """
 
 
@@ -325,7 +402,7 @@ def handle_message(chat_id, text):
 
 
     if text == "🎁 Promo kodlar":
-        user_states[chat_id] = "promo"
+        user_states[chat_id] = "promo_main"
 
         send_message(
             chat_id,
@@ -371,7 +448,8 @@ def handle_message(chat_id, text):
         send_message(
             chat_id,
             WORKS_TEXT,
-            back_keyboard()
+            back_keyboard(),
+            parse_mode="HTML"
         )
         return
 
@@ -382,11 +460,8 @@ def handle_message(chat_id, text):
 
     if text == "📝 Mavzulashtirilgan testlar":
 
-        # Foydalanuvchi Adabiyot menyusida qoladi
-        user_states[chat_id] = "literature"
+        user_states[chat_id] = "tests"
 
-        # Faqat to‘lov xabari chiqadi
-        # Avtomatik "🔙 Ortga" xabari YO‘Q
         send_message(
             chat_id,
             TESTS_TEXT,
@@ -401,10 +476,8 @@ def handle_message(chat_id, text):
 
     if text == "🎓 Ibrat Academy":
 
-        # Promo menyusi holatda qoladi
         user_states[chat_id] = "promo"
 
-        # Faqat mahsulot ma‘lumoti chiqadi
         send_message(
             chat_id,
             IBRAT_TEXT,
@@ -470,18 +543,6 @@ def handle_message(chat_id, text):
         current_state = user_states.get(chat_id, "main")
 
 
-        # Adabiyot → O‘quv materiallari
-        if current_state == "literature":
-            user_states[chat_id] = "materials"
-
-            send_message(
-                chat_id,
-                MATERIALS_TEXT,
-                materials_keyboard()
-            )
-            return
-
-
         # Asarlar → Adabiyot
         if current_state == "works":
             user_states[chat_id] = "literature"
@@ -506,9 +567,21 @@ def handle_message(chat_id, text):
             return
 
 
-        # Promo mahsulot → Promo kodlar
+        # Adabiyot → O‘quv materiallari
+        if current_state == "literature":
+            user_states[chat_id] = "materials"
+
+            send_message(
+                chat_id,
+                MATERIALS_TEXT,
+                materials_keyboard()
+            )
+            return
+
+
+        # Promo mahsulot → Promo menyusi
         if current_state == "promo":
-            user_states[chat_id] = "promo"
+            user_states[chat_id] = "promo_main"
 
             send_message(
                 chat_id,
